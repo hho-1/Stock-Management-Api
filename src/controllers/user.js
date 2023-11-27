@@ -21,11 +21,11 @@ module.exports={
         
         const data = await res.getModelList(User)   //find yerine bunu yapiyoruz cünkü pagination sayfasindaki search sort gibi seylerin aktif olabilmesi icin getModelList kullaniyoruz.
 
-        res.status(200).send({
+        /* res.status(201).send({
             error: false,
-            detail: await res.getModelListDetails(User),
             data
-        })
+        }) */
+        res.status(200).send(data)    // Istenen bu sekilde oldugu icin gerisini sildik
     },
     create: async (req, res) => {
 
@@ -38,6 +38,9 @@ module.exports={
                 schema: { }
             }
         */
+
+        req.body.is_staff = false
+        req.body.is_superadmin = false
 
         const data = await User.create(req.body)
 
@@ -76,7 +79,6 @@ module.exports={
 
         res.status(202).send({
             error: false,
-            data,
             new: await User.findOne({_id: req.params.id})
         })
     },

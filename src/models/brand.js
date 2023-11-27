@@ -22,5 +22,10 @@ const BrandSchema = new mongoose.Schema({
     collection: 'brands',
     timestamps: true
   })
+
+BrandSchema.pre(['init'], function (data) {
+    data.id=data._id    
+    data.createds = data.createdAt.toLocaleDateString('tr-tr')    
+})
   
   module.exports=mongoose.model('Brand', BrandSchema)

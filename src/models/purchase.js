@@ -49,5 +49,10 @@ const PurchaseSchema = new mongoose.Schema({
     collection: 'purchases',
     timestamps: true
   })
+
+PurchaseSchema.pre(['init'], function (data) {
+    data.id=data._id    
+    data.createds = data.createdAt.toLocaleDateString('tr-tr')    
+})
   
   module.exports=mongoose.model('Purchase', PurchaseSchema)

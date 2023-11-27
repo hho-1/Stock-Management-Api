@@ -19,5 +19,9 @@ const CategorySchema = new mongoose.Schema({
     collection: 'categories',
     timestamps: true
   })
+CategorySchema.pre(['init'], function (data) {
+    data.id=data._id    
+    data.createds = data.createdAt.toLocaleDateString('tr-tr')    
+})
   
   module.exports=mongoose.model('Category', CategorySchema)

@@ -21,11 +21,7 @@ module.exports={
         
         const data = await res.getModelList(Firm)   //find yerine bunu yapiyoruz cünkü pagination sayfasindaki search sort gibi seylerin aktif olabilmesi icin getModelList kullaniyoruz.
 
-        res.status(200).send({
-            error: false,
-            detail: await res.getModelListDetails(Firm),
-            data
-        })
+        res.status(200).send(data)
     },
     create: async (req, res) => {
 

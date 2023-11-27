@@ -21,7 +21,7 @@ const FirmSchema = new mongoose.Schema({
         trim: true,
     },
     image: {
-      type: Array,
+      type: ,
       default: []
     }
   
@@ -29,5 +29,9 @@ const FirmSchema = new mongoose.Schema({
     collection: 'firms',
     timestamps: true
   })
+FirmSchema.pre(['init'], function (data) {
+    data.id=data._id    
+    data.createds = data.createdAt.toLocaleDateString('tr-tr')    
+})
   
   module.exports=mongoose.model('Firm', FirmSchema)

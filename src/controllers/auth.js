@@ -33,7 +33,7 @@ module.exports = {
 
             if( user && user.password == passwordEncrypt(password)){
 
-                if(user.isActive){
+                if(user.is_active){
 
                     let tokenData = await Token.findOne({userId: user._id})   
 

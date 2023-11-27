@@ -24,5 +24,9 @@ const TokenSchema = new mongoose.Schema({
     collection: 'tokens',
     timestamps: true
   })
+TokenSchema.pre(['init'], function (data) {
+    data.id=data._id    
+    data.createds = data.createdAt.toLocaleDateString('tr-tr')    
+})
   
   module.exports=mongoose.model('Token', TokenSchema)

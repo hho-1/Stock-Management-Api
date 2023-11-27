@@ -33,5 +33,9 @@ const ProductSchema = new mongoose.Schema({
     collection: 'products',
     timestamps: true
   })
+ProductSchema.pre(['init'], function (data) {
+    data.id=data._id    
+    data.createds = data.createdAt.toLocaleDateString('tr-tr')    
+})
   
   module.exports=mongoose.model('Product', ProductSchema)

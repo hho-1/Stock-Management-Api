@@ -12,7 +12,7 @@ router.route('/')
         .post(permissions.isLogin, user.create)
 router.route('/:id')
         .get(permissions.isLogin, user.read)
-        .put(permissions.isAdmin, user.update)
+        .put(permissions.isAdmin, user.update)               
         .patch(permissions.isAdmin, user.update)               
         .delete(permissions.isAdmin,user.delete)
 

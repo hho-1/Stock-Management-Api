@@ -42,5 +42,9 @@ const SaleSchema = new mongoose.Schema({
     collection: 'sales',
     timestamps: true
   })
+SaleSchema.pre(['init'], function (data) {
+    data.id=data._id    
+    data.createds = data.createdAt.toLocaleDateString('tr-tr')    
+})
   
   module.exports=mongoose.model('Sale', SaleSchema)
