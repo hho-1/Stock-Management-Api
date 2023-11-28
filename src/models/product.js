@@ -9,14 +9,12 @@ const ProductSchema = new mongoose.Schema({
     categoryId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Category',
-      required: true,
-      unique: true
+      required: true
     },
     brandId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Brand',
-      required: true,
-      unique: true
+      required: true
     },
     name: {
       type: String,
@@ -24,7 +22,7 @@ const ProductSchema = new mongoose.Schema({
       required: true,
     },
     
-    quantity: {
+    stock: {
       type: Number,
       required: true,
     }

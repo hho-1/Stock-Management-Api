@@ -7,12 +7,12 @@ const permissions = require('../middlewares/permissions')
 const product = require('../controllers/product')
 
 router.route('/')
-        .get(permissions.isLogin, product.list)
-        .post(permissions.isLogin, product.create)
+        .get(permissions.isStaff, product.list)
+        .post(permissions.isAdmin, product.create)
 router.route('/:id')
-        .get(permissions.isLogin, product.read)
-        .put(permissions.isAdmin, product.update)
-        .patch(permissions.isAdmin, product.update)               
+        .get(permissions.isStaff, product.read)
+        .put(permissions.isStaff, product.update)
+        .patch(permissions.isStaff, product.update)               
         .delete(permissions.isAdmin,product.delete)
 
         

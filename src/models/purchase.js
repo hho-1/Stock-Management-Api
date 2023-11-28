@@ -11,26 +11,22 @@ const PurchaseSchema = new mongoose.Schema({
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
-      unique: true
+      required: true
     },
     firmId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Firm',
-      required: true,
-      unique: true
+      required: true
     },
     productId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Product',
-      required: true,
-      unique: true
+      required: true
     },
     brandId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Brand',
-      required: true,
-      unique: true
+      required: true
     },
     quantity: {
       type: Number,
@@ -40,10 +36,13 @@ const PurchaseSchema = new mongoose.Schema({
       type: Number,
       required: true,
     },
-    priceTotal: {
+    price_total: {
       type: Number,
-      required: true
-    },
+      default:0,
+      // set: function(){ return this.price * this.quantity},
+      default: function(){ return this.price * this.quantity}, // for Create
+      transform: function(){ return this.price * this.quantity}, // for Update        
+  }, 
   
   },{
     collection: 'purchases',

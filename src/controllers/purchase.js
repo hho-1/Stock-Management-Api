@@ -3,6 +3,7 @@
 // Purchase Controller:
 
 const Purchase = require('../models/purchase')
+const Product = require('../models/product')
 
 module.exports={
     list: async (req, res) => {
@@ -19,7 +20,7 @@ module.exports={
             `
         */
         
-        const data = await res.getModelList(Purchase)   //find yerine bunu yapiyoruz cünkü pagination sayfasindaki search sort gibi seylerin aktif olabilmesi icin getModelList kullaniyoruz.
+        const data = await res.getModelList(Purchase, {}, ['firmId', 'brandId', 'productId'])   //find yerine bunu yapiyoruz cünkü pagination sayfasindaki search sort gibi seylerin aktif olabilmesi icin getModelList kullaniyoruz.
 
         res.status(200).send({
             error: false,
@@ -39,7 +40,10 @@ module.exports={
             }
         */
 
+        
         const data = await Purchase.create(req.body)
+
+        const updateProducts = await Product.updateOne({_id: data.productId}, {$inc:{ stock: data.quantity}})
 
         res.status(201).send({
             error: false,
@@ -72,7 +76,15 @@ module.exports={
             }
         */
 
+        //Son alimdaki deger
+        const currentPurchase = await Purchase.findOne({_id: req.params.id})
+        const quantity = req.body.quantity - currentPurchase.quantity
+
+        //Son alimdaki degerlerin yeni hali
         const data = await Purchase.updateOne({_id: req.params.id}, req.body, {runValidators: true})
+
+        //Product'taki stok miktarinin alim miktarina göre güncellenmesi
+        const updateProducts = await Product.updateOne({_id: data.productId}, {$inc : {stock: quantity}})
 
         res.status(202).send({
             error: false,

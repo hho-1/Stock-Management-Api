@@ -21,7 +21,7 @@ const FirmSchema = new mongoose.Schema({
         trim: true,
     },
     image: {
-      type: ,
+      type: Array,
       default: []
     }
   

@@ -42,7 +42,6 @@ app.use(require('./src/middlewares/logger'))
 app.use(require('./src/middlewares/findSearchSortPage'))
 
 /* ------------------------------------------------------- */
-// Routes:
 
 // HomePath:
 app.all('/', (req, res) => {
@@ -71,4 +70,4 @@ app.listen(PORT, HOST, () => console.log(`http://${HOST}:${PORT}`))
 
 /* ------------------------------------------------------- */
 // Syncronization (must be in commentLine):
-// require('./src/helpers/sync')() // !!! It clear database.
+//require('./src/helpers/sync')() // !!! It clear database.

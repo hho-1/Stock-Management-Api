@@ -9,7 +9,7 @@ const category = require('../controllers/category')
 
 router.route('/')
         .get(permissions.isLogin, category.list)
-        .post(permissions.isLogin, category.create)
+        .post(permissions.isAdmin, category.create)
 router.route('/:id')
         .get(permissions.isLogin, category.read)
         .put(permissions.isAdmin, category.update)

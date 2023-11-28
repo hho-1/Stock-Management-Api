@@ -33,10 +33,13 @@ const SaleSchema = new mongoose.Schema({
       type: Number,
       required: true,
     },
-    priceTotal: {
+    price_total: {
       type: Number,
-      required: true
-    },
+      default:0,
+      // set: function(){ return this.price * this.quantity},
+      default: function(){ return this.price * this.quantity}, // for Create
+      transform: function(){ return this.price * this.quantity}, // for Update        
+  },
   
   },{
     collection: 'sales',
