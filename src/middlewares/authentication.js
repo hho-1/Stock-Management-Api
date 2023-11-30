@@ -21,12 +21,12 @@ module.exports = async (req, res, next) => {
             
         if(tokenKey[0]=='Token'){
 
-            const tokenData = await Token.findOne({token: tokenKey[1]}).populate('user_id')
-            req.user=tokenData ? tokenData.user_id : undefined
+            const tokenData = await Token.findOne({token: tokenKey[1]}).populate('userId')
+            req.user=tokenData ? tokenData.userId : undefined
 
         }else if(tokenKey[0]=='Bearer'){
 
-            jwt.verify(tokenKey[1],process.env.ACCESS_KEY,(err,userDAta)=>req.user=userData)
+            jwt.verify(tokenKey[1],process.env.ACCESS_KEY,(err,userDAta)=>req.user=userDAta)
 
         }
             
