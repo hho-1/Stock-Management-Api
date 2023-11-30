@@ -49,6 +49,12 @@ module.exports={
             const data = await Sale.create(req.body)
 
             const updateProduct = await Product.updateOne({_id: data.productId}, {$inc:{ stock: -data.quantity}})
+
+            res.status(201).send({
+                error: false,
+                data
+            })
+
         }
         else{
             res.errorStatusCode = 422
@@ -56,11 +62,10 @@ module.exports={
         }
 
         
-
-        res.status(201).send({
+        /* res.status(201).send({
             error: false,
             data
-        })
+        }) */
     },
     read: async (req, res) => {
 
@@ -88,7 +93,7 @@ module.exports={
             }
         */
 
-            req.body.userId=req.user?._id
+        req.body.userId=req.user?._id
 
         if(req.body?.quantity){
             const currentSale = await Sale.findOne({_id: req.params.id})

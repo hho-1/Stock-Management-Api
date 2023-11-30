@@ -88,10 +88,10 @@ module.exports={
         // console.log('**********');
         // console.log(req.body.quantity);
         // console.log('**********');
-        console.log(currentPurchase.quantity);
+        //console.log(currentPurchase.quantity);
         const quantity=req.body.quantity - currentPurchase.quantity
         // console.log('**********');
-        // console.log(quantity);
+         //console.log(quantity);
         
         // // product daki stok miktarınn değişen alım miktarına göre güncellenmesi
         const updateProduct= await Product.updateOne({_id:currentPurchase.productId}, {$inc : {stock: quantity}})

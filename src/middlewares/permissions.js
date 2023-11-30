@@ -25,7 +25,7 @@ module.exports = {
     isAdmin: (req, res, next) => {
 
         // Set Passive:
-        //return next()
+        // return next()
         
         // only Admin:
         if (req.user && req.user.is_active && req.user.is_superadmin) {
