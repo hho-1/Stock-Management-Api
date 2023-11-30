@@ -40,7 +40,8 @@ module.exports={
             }
         */
 
-        
+        req.body.userId = req.user?._id
+
         const data = await Purchase.create(req.body)
 
         const updateProducts = await Product.updateOne({_id: data.productId}, {$inc:{ stock: data.quantity}})
@@ -56,6 +57,7 @@ module.exports={
             #swagger.tags = ["Purchases"]
             #swagger.summary = "Get Single Purchase"
         */
+        //const data = await Purchase.findOne({_id: req.params.id}).populate(['firmId','brandId','productId'])
         const data = await Purchase.findOne({_id: req.params.id})
 
         res.status(200).send({
@@ -76,20 +78,28 @@ module.exports={
             }
         */
 
-        //Son alimdaki deger
-        const currentPurchase = await Purchase.findOne({_id: req.params.id})
-        const quantity = req.body.quantity - currentPurchase.quantity
+        // son alımdaki değer                    
+        const currentPurchase=await Purchase.findOne({ _id: req.params.id})    
 
-        //Son alimdaki degerlerin yeni hali
-        const data = await Purchase.updateOne({_id: req.params.id}, req.body, {runValidators: true})
-
-        //Product'taki stok miktarinin alim miktarina göre güncellenmesi
-        const updateProducts = await Product.updateOne({_id: data.productId}, {$inc : {stock: quantity}})
-
-        res.status(202).send({
+        // son alımdai değerlerin yeni hali 
+        //  console.log('**********');
+        // console.log(req.body);   
+        const data=await Purchase.updateOne({ _id: req.params.id},req.body,{ runValidators:true })
+        // console.log('**********');
+        // console.log(req.body.quantity);
+        // console.log('**********');
+        console.log(currentPurchase.quantity);
+        const quantity=req.body.quantity - currentPurchase.quantity
+        // console.log('**********');
+        // console.log(quantity);
+        
+        // // product daki stok miktarınn değişen alım miktarına göre güncellenmesi
+        const updateProduct= await Product.updateOne({_id:currentPurchase.productId}, {$inc : {stock: quantity}})
+   
+        
+        res.status(200).send({
             error: false,
-            data,
-            new: await Purchase.findOne({_id: req.params.id})
+            new: await Purchase.findOne({ _id: req.params.id})
         })
     },
     delete: async (req, res) => {
@@ -98,7 +108,13 @@ module.exports={
             #swagger.tags = ["Purchases"]
             #swagger.summary = "Delete Purchase"
         */
+
+        const currentPurchase = await Purchase.findOne({_id: req.params.id})
+
         const data = await Purchase.deleteOne({_id: req.params.id})
+        
+        const updateProduct = await Product.updateOne({_id: currentPurchase.productId}, {$inc : {stock: -currentPurchase.quantity}})
+
 
         res.status(data.deletedCount ? 202 : 404).send({
             error: false,

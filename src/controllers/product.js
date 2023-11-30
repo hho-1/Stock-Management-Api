@@ -39,6 +39,9 @@ module.exports={
             }
         */
 
+        // req.body.is_staff=false
+        // req.body.is_superadmin =false
+
         const data = await Product.create(req.body)
 
         res.status(201).send({
@@ -86,6 +89,22 @@ module.exports={
             #swagger.tags = ["Products"]
             #swagger.summary = "Delete Product"
         */
+
+
+        // if(req.user.is_superadmin){ 
+        //     const data=await Product.deleteOne({ _id: req.params.id})
+
+        //     res.status(data.deletedCount ? 202 : 404).send({
+        //             error: !data.deletedCount,
+        //             data
+        //     })       
+        // }else{
+        //     res.status(200).send({
+        //         error: true,
+        //         message: "you must admin"
+        //     })
+        // }
+        
         const data = await Product.deleteOne({_id: req.params.id})
 
         res.status(data.deletedCount ? 202 : 404).send({

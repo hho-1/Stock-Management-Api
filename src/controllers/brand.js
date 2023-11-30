@@ -35,9 +35,6 @@ module.exports={
             }
         */
 
-        req.body.is_staff=false
-        req.body.is_superadmin =false
-
         const data = await Brand.create(req.body)
 
         res.status(201).send({
@@ -88,7 +85,7 @@ module.exports={
         const data = await Brand.deleteOne({_id: req.params.id})
 
         res.status(data.deletedCount ? 202 : 404).send({
-            error: false,
+            error: !data.deletedCount,
             data
         })
     },

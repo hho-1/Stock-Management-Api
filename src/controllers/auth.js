@@ -34,18 +34,28 @@ module.exports = {
             if( user && user.password == passwordEncrypt(password)){
 
                 if(user.is_active){
-
-                    let tokenData = await Token.findOne({userId: user._id})   
-
-                    if(!tokenData){
-                        let tokenKey = passwordEncrypt(user._id + Date.now())
-                        tokenData = await Token.create({userId: user._id, token: tokenKey})
+                    if(process.env.KEY_MODE=='token'){
+                        // token generate}
+                        let tokenData=await Token.findOne({user_id:user._id})
+              
+                        if(!tokenData) tokenData= await Token.create({
+                      
+                                user_id:user._id,
+                                token: passwordEncrypt(user._id+Date.now())
+                            })
+                
+                    }else if(process.env.KEY_MODE=='jwt'){
+                        // generate JWT
+                        const accessToken=jwt.sign(user.toJSON(), process.env.ACCESS_KEY, { expiresIn: '40m'})
+                        const refreshToken=jwt.sign({_id:user.id,password:user.password}, process.env.REFRESH_KEY, { expiresIn: '40d'})
                     }
                     res.send({
-                        error: false,
-                        token: tokenData.token,
-                        user
+                        error:false,
+                        key: tokenData.token,
+                        bearer: {accessToken,refreshToken},
+                        user,
                     })
+                    
                 }
                 else{
                     res.errorStatusCode = 401

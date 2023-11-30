@@ -3,6 +3,7 @@
 // Sale Controller:
 
 const Sale = require('../models/sale')
+const Product = require('../models/product')
 
 module.exports={
     list: async (req, res) => {
@@ -18,7 +19,8 @@ module.exports={
                 </ul>
             `
         */
-        
+    
+
         const data = await res.getModelList(Sale)   //find yerine bunu yapiyoruz cünkü pagination sayfasindaki search sort gibi seylerin aktif olabilmesi icin getModelList kullaniyoruz.
 
         res.status(200).send({
@@ -39,7 +41,21 @@ module.exports={
             }
         */
 
-        const data = await Sale.create(req.body)
+        req.body.userId = req.user?._id
+
+        const currentStocks = await Product.findOne({_id: req.body.productId})
+
+        if(currentStocks.stock >= req.body.quantity){
+            const data = await Sale.create(req.body)
+
+            const updateProduct = await Product.updateOne({_id: data.productId}, {$inc:{ stock: -data.quantity}})
+        }
+        else{
+            res.errorStatusCode = 422
+            throw new Error(' not enough stock', {cause: {currentStocks}})
+        }
+
+        
 
         res.status(201).send({
             error: false,
@@ -72,6 +88,16 @@ module.exports={
             }
         */
 
+            req.body.userId=req.user?._id
+
+        if(req.body?.quantity){
+            const currentSale = await Sale.findOne({_id: req.params.id})
+            const quantity = req.body.quantity - currentSale.quantity
+
+            //Product'taki stok miktarinin satis miktarina göre güncellenmesi
+            const updateProduct = await Product.updateOne({_id: currentSale.productId}, {$inc : {stock: -quantity}})
+        }
+
         const data = await Sale.updateOne({_id: req.params.id}, req.body, {runValidators: true})
 
         res.status(202).send({
@@ -86,7 +112,12 @@ module.exports={
             #swagger.tags = ["Sales"]
             #swagger.summary = "Delete Sale"
         */
+
+        const currentSale = await Sale.findOne({_id: req.params.id})
+
         const data = await Sale.deleteOne({_id: req.params.id})
+
+        const updateProduct = await Product.updateOne({_id: currentSale.productId}, {$inc : {stock: currentSale.quantity}})
 
         res.status(data.deletedCount ? 202 : 404).send({
             error: false,

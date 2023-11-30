@@ -10,15 +10,16 @@ const FirmSchema = new mongoose.Schema({
       type: String,
       trim: true,
       required: true,
+      unique: true,
     },
     phone: {
-      type: Number,
+      type: String,
       required: true,
       unique: true
     },
     address: {
-        type: String,
-        trim: true,
+      type: String,
+      trim: true,
     },
     image: {
       type: Array,
